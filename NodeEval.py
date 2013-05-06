@@ -23,7 +23,7 @@ from subprocess import Popen, PIPE, STDOUT
 g_enabled = False
 g_view = None
 g_threshold = int (sublime.load_settings("NodeEval.sublime-settings").get('threshold'))
-
+g_lastCwd = None
 
 # 
 # Toggle continuous eval'ing of a selection/document
@@ -126,17 +126,33 @@ def scratch(v, output, title=False, **kwargs):
 # Eval the "data" (message) with basically: `node -p -e data`
 #
 def eval(view, data, region):
+  global g_lastCwd
   # get the current working dir, if one exists...
   cwd = view.file_name()
-  cwd = os.path.dirname(cwd) if cwd else None
+  if cwd != None:
+    cwd = os.path.dirname(cwd)
+    g_lastCwd = cwd
+  else:
+    cwd = g_lastCwd
+
   s = sublime.load_settings("NodeEval.sublime-settings")
   node_command = os.path.normpath(s.get('node_command'))
+  node_args = ["-p"]
+
+  if("CoffeeScript" in view.settings().get('syntax')):
+    coffee_command = os.path.normpath(s.get('coffee_command'))
+    if(coffee_command):
+      node_command = coffee_command
+      node_args = ["-s"]
+
+  print "evaling %s with %s in %s" % (node_command, node_args, cwd)
+
   try:
     # node = Popen([node_command, "-p", data.encode("utf-8")], stdout=PIPE, stderr=PIPE)
     if os.name == 'nt':
-      node = Popen([node_command, "-p"], cwd=cwd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+      node = Popen([node_command] + node_args, cwd=cwd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     else:
-      node = Popen([node_command, "-p"], cwd=cwd, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+      node = Popen([node_command] + node_args, cwd=cwd, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
     node.stdin.write( data.encode("utf-8") )
     result, error = node.communicate()
   except OSError,e:
@@ -144,7 +160,8 @@ def eval(view, data, region):
  Please check that the absolute path to the node binary is correct:
  Attempting to execute: %s
  Error: %s
-    """ % (node_command, e[1])
+    """ % (node_command, "a")
+    print e
     panel(view, error_message, False)
     return False
 
