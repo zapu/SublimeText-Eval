@@ -125,7 +125,7 @@ def scratch(v, output, title=False, **kwargs):
 #
 # Eval the "data" (message) with basically: `node -p -e data`
 #
-def eval(view, data, region):
+def eval(view, data, region, print_compile):
   global g_lastCwd
   # get the current working dir, if one exists...
   cwd = view.file_name()
@@ -143,7 +143,10 @@ def eval(view, data, region):
     coffee_command = os.path.normpath(s.get('coffee_command'))
     if(coffee_command):
       node_command = coffee_command
-      node_args = ["-s"]
+      if(print_compile):
+        node_args = ["-s", "-p"]
+      else:
+        node_args = ["-s"]
 
   print "evaling %s with %s in %s" % (node_command, node_args, cwd)
 
@@ -197,10 +200,15 @@ def _node_eval(s, edit, focus=False):
     n_regions = list(regions)
     num = len(regions)
     x = len(s.view.substr(regions[0]))
+
+    print_compile = False
+
     # select the whole document if there is no user selection
     if num <= 1 and x == 0 or focus:
       regions.clear()
       regions.add( sublime.Region(0, view_size) )
+
+      print_compile = True
 
     # get current document encoding or set sane defaults
     encoding = s.view.encoding()
@@ -212,7 +220,7 @@ def _node_eval(s, edit, focus=False):
     # eval selections
     for region in regions:
       data = s.view.substr(region)
-      eval(s.view, data, region)
+      eval(s.view, data, region, print_compile)
 
     regions.clear()
     regions.add(n_regions[0])
