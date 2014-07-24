@@ -1,78 +1,46 @@
-NodeEval Sublime Text 2 Package
-=============================
+Eval Sublime Text 2 Package
+===============================
 
-### Use the NodeJS binary to evaluate a document or selection(s) and print the results
-
-Screenshots
---------
-![Preview](https://github.com/mediaupstream/SublimeText-NodeEval/raw/master/screenshots/NodeEval_output1.png "Output to a new File") ![Preview](https://github.com/mediaupstream/SublimeText-NodeEval/raw/master/screenshots/NodeEval_output2.png "Output to Console, etc...")  
-
+Fork of NodeEval, with hacked on support for CoffeeScript and F#. Adding other languages should be relatively easy - as long as their compilers/interpreters support running from stdin.
 
 Install
 -------
-Installation via the [Package Control](http://wbond.net/sublime_packages/package_control) (Search for `NodeEval`)
-  
-To install manually clone this project into your `Sublime Text 2\Packages` folder:
+To install, clone the repo to Packages folder of Sublime Text 2.
 
-*OSX*
+Go to:
 
-    git clone git://github.com/mediaupstream/SublimeText-NodeEval.git ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/NodeEval
+on Windows: 
 
-*Windows*
+    %APPDATA%\Sublime Text 2\Packages
 
-    git clone git://github.com/mediaupstream/SublimeText-NodeEval.git "%APPDATA%\Sublime Text 2\Packages\NodeEval"
+on Ubuntu (and other others? no idea):
 
+    ~/.config/sublime-text-2/Packages  
+
+and then:
+
+    git clone https://github.com/zapu/SublimeText-Evals.git Evals
 
 Usage
 -----
-After installation you will have:  
+After installation, create your settings file (Preferences > Package Settings > Evals > Settings - User). Just copy everything from default settings file and change paths.
 
-* Context Menu and `Tools` Menu items:
-  - `NodeEval` - evaluate the current selection(s) / document with `node`
-  - `NodeEval - Continuous (Toggle)` - Continually evaluate the current selection(s) / document with `node`. This command is a toggle for the current document / selection(s) only. You can set the refresh rate in the Sublime settings (see below)
-* Default keyboard shortcuts:  
-  - `ctrl+n,e`  
-* Package Settings: `Preferences > Package Settings > NodeEval`  
-  ```javascript
-    {
-      // The absolute path to your nodejs executable
-      // e.g. "/usr/local/bin/node" or "C:\\bin\\node.exe"
-      "node_command": "/usr/local/bin/node",
+Then, when editing JavaScript, CoffeeScript or F#, press `ctrl+shift+l` to evaluate and display results. Files do not have to be saved, but their syntax has to be set properly. Use `ctrl+p` and `Set Syntax: ...`.
 
-      // How to output the results, options include:
-      // - new [default] "send output to a new file"
-      // - console       "send output to a new Panel (Console) view"
-      // - replace       "overwrite the current file/selection with the output"
-      // - clipboard     "there is no output, output copied to clipboard"
-      "output": "new",
+By default, CoffeeScript is set to compile to JavaScript, rather than to evaluate the code. My workflow is to use `ctrl+shift+l` twice when I need to run CoffeeScript code.
+  - Pressed the first time, it will output the JavaScript.
+  - Pressed the second time, it will run that JavaScript.
 
-      // if output type is "new" the output is overwritten, set to false to append the output
-      "overwrite_output": true,
+Unsure if this works with ST3, probably not. 
 
-      // if set to true the output is copied to the clipboard
-      // if `output` is set to "clipboard" this value is ignored
-      "copy_to_clipboard": false,
-
-      // refresh rate threshold for "continuous" mode (in milliseconds)
-      "threshold": 200
-    }
-  ```
-
-The commands work on a selection, multiple selections or if nothing is selected the whole document. Your script will be eval'd through the nodejs repl.  
-
-Your results may contain `undefined` in places, for example if your last line is an expression who's return value is `undefined` you will see that in the output...  
-
-----
-
-**Why not just use the NodeJS ST2 plugin, or the nodejsLauncher plugin ?**   
-the `NodeJS` plugin is awesome, but it's also really bloated. also I don't think that the `nodejsLauncher` actually works, I looked at the sourcecode and was like wtf.
-
+Patches are welcome. You can, for example, pull the new threading code from upstream.
 
 
 Author & Contributors
 ----------------------
 [Derek Anderson](http://twitter.com/derekanderson)
 
+[Michał Zochniak](github.com/zapu)
 
 License
 -------
