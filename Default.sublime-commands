@@ -1,5 +1,5 @@
 [{
-  "caption": "NodeEval",
-  "command": "node_eval", 
+  "caption": "EvalEval",
+  "command": "eval_eval", 
   "args": {}
 }]

@@ -3,17 +3,10 @@
   "mnemonic": "t",
   "id": "tools",
   "children": [{
-    "id": "nodeevalmenu",
-    "caption": "NodeEval",
-    "command": "node_eval", 
+    "id": "evalmenu",
+    "caption": "Evaluate file",
+    "command": "eval_eval", 
     "args": {}
-    },{
-    "id": "nodeevalmenu",
-    "caption": "NodeEval - Continuous (Toggle)",
-    "command": "node_eval", 
-    "args": {
-      "continuous":true
-    }
     }]
 },{
   "caption": "Preferences",
@@ -24,18 +17,18 @@
     "mnemonic": "P",
     "id": "package-settings",
     "children":[{
-      "caption": "NodeEval",
+      "caption": "Evals",
       "children": [{
         "command": "open_file",
         "args": {
-          "file": "${packages}/NodeEval/NodeEval.sublime-settings"
+          "file": "${packages}/Evals/Evals.sublime-settings"
         },
         "caption": "Settings – Default"
       },
       {
         "command": "open_file",
         "args": {
-          "file": "${packages}/User/NodeEval.sublime-settings"
+          "file": "${packages}/User/Evals.sublime-settings"
         },
         "caption": "Settings – User"
       },
